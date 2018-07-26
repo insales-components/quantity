@@ -1,0 +1,33 @@
+{% comment %}
+  {% include "quantity", input_type: 'cart' %}
+  {% include "quantity", input_type: 'product', input_value: 3 %}
+{% endcomment %}
+{% unless input_value %}
+  {% assign input_value = item.quantity | default: 1 %}
+{% endunless %}
+
+{% assign input_type = input_type | default: 'product' %}
+
+{% if input_type == 'cart' %}
+    {% capture input_name %}cart[quantity][{{ item.id }}]{% endcapture %}
+  {% else %}
+    {% assign input_name = 'quantity' %}
+{% endif %}
+
+<div data-quantity class="quantity is-{{ input_type }}">
+  <div class="quantity-controls">
+    <button data-quantity-change="-1" class="quantity-control bttn-count">
+      -
+    </button>
+
+    <input class="quantity-input" type="text" name="{{ input_name }}" value="{{ input_value }}" />
+
+    <button data-quantity-change="1" class="quantity-control bttn-count">
+      +
+    </button>
+  </div>
+</div>
+
+{% assign input_value = nil %}
+{% assign input_name = nil %}
+{% assign input_type = nil %}
